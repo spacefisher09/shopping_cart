@@ -80,8 +80,8 @@ function Step_3(props) {
               </div> */}
               <select name="" id="" className="form-control ml-sm-1" onChange={slctTime}>
                 <option>請選擇收貨時間</option>
-                <option value={"下午13：00前"}>下午13：00前</option>
-                <option value={"下午14：00～18：00前"}>下午14：00～18：00前</option>
+                <option value={"中午12：00前"}>中午12：00前</option>
+                <option value={"下午12：00～18：00"}>下午12：00～18：00</option>
               </select>
             </div>
             <div className="form-group w-s-100 flex-wrap mr-sm-3 mb-2">

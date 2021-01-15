@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,6 +25,7 @@ SECRET_KEY = '70x#6=dckezw023-ut9oj9&++#i)8sd+59(sobqcg46g3p!1g#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#上面debug關掉 下面 [] 需要改 ['*']
 ALLOWED_HOSTS = []
 
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework', #installed app
+    'rest_framework.authtoken', #installed app
     'corsheaders', #installed app
 
     'app_00' #new app
@@ -95,6 +97,13 @@ DATABASES = {
     }
 }
 
+#token 設定
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES':(  #預設認證
+        'rest_framework.permissions.AllowAny',  # 設定>無限制, IsAuthenticated全域認證,
+    )
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -134,3 +143,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#覆寫ImageField套件中的值 避免圖片無法顯示
+MEDIA_ROOT = os.path.join(BASE_DIR, "src/images")
+MEDIA_URL = '/src/images/'

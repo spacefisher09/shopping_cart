@@ -86,7 +86,9 @@ function MbrOrderList() {
                       }
                     </td>
                     <td data-label="運送狀態|" className="text-center text-secondary font-weight-bold">未出貨</td>
-                    <td data-label="訂單狀態|" className="text-center text-secondary font-weight-bold">處理中</td>
+                    <td data-label="訂單狀態|" className="text-center text-secondary font-weight-bold">
+                      <button className="btn btn-outline-danger btn-sm" type="button">刪除訂單</button>
+                    </td>
                   </tr>
                 )
 

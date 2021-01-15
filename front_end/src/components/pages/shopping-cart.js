@@ -57,7 +57,7 @@ function ShoppingCart(props) {
         }}
       </BrdcrbConsumer>
 
-      <div className="ftco-section pb-5 container px-3">
+      <form className="ftco-section pb-5 container px-3" onSubmit={handleShow}>
 
         <HeadTitle EngTitle="shopping cart" HdTitle="結 帳 購 物 車" />
         <div className="w-0 alert alert-warning border-0 rounded-0 h5 text-cus-secondary">
@@ -82,10 +82,10 @@ function ShoppingCart(props) {
 
         <div className="w-100 d-flex flex-nowrap justify-content-center mt-4">
           <button className="btn btn-warning d-inline-block W-20 w-xs-50 mr-2" type="button" onClick={dlteOrder}>返回上頁,並清空購物車</button>
-          <button className="btn btn-danger d-inline-block W-20 w-xs-50" onClick={handleShow}>確認送出</button>
+          <button className="btn btn-danger d-inline-block W-20 w-xs-50" type="submit">確認送出</button>
         </div>
 
-      </div>
+      </form>
       {/* <!-- modal --> */}
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Body><h4>訂單送出後就無法修改，確定要送出此份訂單嗎?</h4></Modal.Body>
