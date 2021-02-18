@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { Route, Switch,  BrowserRouter as Router } from 'react-router-dom';
+import { CookiesProvider } from 'react-cookie'
 
 //plugin- datepicker css
 import "react-datepicker/dist/react-datepicker.css";
@@ -61,9 +62,9 @@ const  routes = {
 
 const RouterList = (
   <React.StrictMode>
+    <CookiesProvider>
     <Router>
       <context.Provider value={routes}>
-        <Navbar />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
@@ -78,6 +79,7 @@ const RouterList = (
         <Footer />
       </context.Provider>
     </Router>
+    </CookiesProvider>
     </React.StrictMode>
   );
 

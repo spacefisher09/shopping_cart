@@ -30,7 +30,7 @@ function Order_dtl(props){
       <Modal.Body style={{ maxHeight: 'calc(100vh - 210px)', overflowY: 'auto' }}>
         {Orderdetail ?
           (<>
-            {Orderdetail.ID_Amount.map(odr => {
+            {Orderdetail.id_Amount.map(odr => {
               return (
                 <div className="d-flex flex-wrap border-bottom border-white">
                   <div className="col-12 col-lg-2 col-md-4">
@@ -93,7 +93,9 @@ function Recv_infoForm(props){
   useEffect(() => {
     setshow(props.pamntSwitch);
     setPamntdetail(props.pamntData);
+    setdetail(props.pamntData[1])
   }, [props])
+  //console.log(detail);
 
   const editPamnt = e =>{
     setdetail(e.target.value);

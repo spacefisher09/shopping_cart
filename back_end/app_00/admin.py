@@ -6,7 +6,7 @@ class pdct_admin(admin.ModelAdmin):
     search_fields=['pdct_name']
 
 class userdata_admin(admin.ModelAdmin):
-    list_display = ('Name','user')
+    list_display = ('id','Name','user')
     search_fields=['Name','user']
 class userorder_admin(admin.ModelAdmin):
     list_display = ('order_id','userdata','order_date')

@@ -1,11 +1,16 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import HeadTitle from '../layouts/HeadTitle';
 
 
 function Product_item(props) {
     
-    const items = props.children.map(
+    const [pdctList,setpdctList] = useState(props.children);
+    useEffect(()=>{
+        setpdctList(props.children);
+    },[props]);
+
+    const items = pdctList.map(
         (arr,index) => {
             return (
                 <div className="col-md-4" key={index}>

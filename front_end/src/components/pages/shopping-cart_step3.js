@@ -1,58 +1,79 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-// import DatePicker, { registerLocale } from "react-datepicker"
-// import zh_TW from "date-fns/locale/zh-TW";
-// registerLocale("zh_TW", zh_TW);
+
 
 function Step_3(props) {
 
   let [order, setorder] = useState(props.pdctInfo);
   let [dataStatus,setdatastatus] = useState(false);
-  // let [getDate,setgetDate] = useState(null);
+  const [Name, setName] = useState(''); 
+  const [Phone, setPhone] = useState(''); 
+  const [Email, setEmail] = useState(''); 
+  const [Address, setAddress] = useState(''); 
 
-  const order_set_rtrn = odr =>{
-    setorder(odr);
-    props.pdctInfoReturned(odr);
+  useEffect(()=>{
+    setorder(props.pdctInfo);
+  },[props]);
+  
+
+  const getUserdata = e => {
+    return (e.target.checked) ? (
+      fetch(`http://127.0.0.1:8000/api/userdata/${order.userdata}/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${props.pgToken}`
+        },
+      }).then(
+        resp => resp.json()
+      ).then(
+        (resp) => {
+          order.recv_info = {
+            'Name':resp.Name,
+            'Phone':resp.Phone,
+            'Email':resp.Email,
+            'Address':resp.Address,
+          };
+          setName(resp.Name);
+          setPhone(resp.Phone);
+          setEmail(resp.Email);
+          setAddress(resp.Address);
+        }
+      ).catch(
+        error => console.log(error)
+      ),
+      props.pdctInfoReturned(order),
+      setdatastatus(true)
+    ) : (
+        setdatastatus(false),
+        order.recv_info = {},
+        props.pdctInfoReturned(order)
+      );
   }
 
-  const getUserdata = e =>{
-      return (e.target.checked) ? (
-          setdatastatus(true),
-          order.recv_info = order.userdata[1],
-          order_set_rtrn(order)
-          ):(
-            setdatastatus(false),
-            order.recv_info = [],
-            order_set_rtrn(order)
-       );
-  }
-
-  // const setDate = date => {
-  //   setgetDate(date);
-  //   console.log(date);
-  // }
+  
 
   const slctTime = e =>{
     return (e.target.value == "請選擇收貨時間") ? 
-    (order.recv_time = null, order_set_rtrn(order))
-    : (order.recv_time = e.target.value, order_set_rtrn(order))
+    (order.recv_time = null, props.pdctInfoReturned(order))
+    : (order.recv_time = e.target.value, props.pdctInfoReturned(order))
   }
 
   const getName = e =>{
-    order.recv_info.Name = e.target.value;
-    order_set_rtrn(order);
+    order.recv_info ={...order.recv_info,'Name':e.target.value};
+    props.pdctInfoReturned(order);
   }
   const getPhone = e =>{
-    order.recv_info.Phone = e.target.value;
-    order_set_rtrn(order);
+    order.recv_info ={...order.recv_info,'Phone':e.target.value};
+    props.pdctInfoReturned(order);
   }
   const getEmail = e =>{
-    order.recv_info.Email = e.target.value;
-    order_set_rtrn(order);
+    order.recv_info ={...order.recv_info,'Email':e.target.value};
+    props.pdctInfoReturned(order);
   }
   const getAddr = e =>{
-    order.recv_info.Address = e.target.value;
-    order_set_rtrn(order);
+    order.recv_info ={...order.recv_info,'Address':e.target.value};
+    props.pdctInfoReturned(order);
   }
 
     return (
@@ -68,33 +89,26 @@ function Step_3(props) {
             </div>
           </div>
           <div className="form-inline">
+            {/* PICK_TZ1 / PICK_TZ2 database儲存值 */}
             <div className="form-group w-100 mb-2">
               <label className="mx-2" htmlFor="receiveTime">指定收貨時間：</label>
-              {/* <div className="date mb-sm-0 mb-1">
-                <DatePicker className="form-control w-100" dateFormat="yyyy/MM/dd" locale="zh_TW" 
-                placeholderText="請選擇日期..." minDate={new Date()}
-                selected={getDate} onChange={setDate} />
-                <span className="input-group-addon text-blue px-2" >
-                  <i className="fas fa-calendar-alt"></i>
-                </span> 
-              </div> */}
               <select name="" id="" className="form-control ml-sm-1" onChange={slctTime}>
                 <option>請選擇收貨時間</option>
-                <option value={"中午12：00前"}>中午12：00前</option>
-                <option value={"下午12：00～18：00"}>下午12：00～18：00</option>
+                <option value={"PICK_TZ1"}>中午12：00前</option>
+                <option value={"PICK_TZ2"}>下午12：00～18：00</option>
               </select>
             </div>
             <div className="form-group w-s-100 flex-wrap mr-sm-3 mb-2">
               <label className="mx-2" htmlFor="receiveName">收貨人姓名：</label>
               {dataStatus ? 
-               <p className="font-weight-bold text-primary mx-2 my-1">{order.userdata[1].Name}</p>
+               <p className="font-weight-bold text-primary mx-2 my-1">{Name}</p>
                : <input type="text" className="form-control" id="receiveName" placeholder="請輸入姓名" onChange={getName} required />
               }
             </div>
             <div className="form-group w-s-100 mb-2 flex-wrap">
               <label className="mx-2" htmlFor="receiveTel">收貨人電話：</label>
               {dataStatus ? 
-                <p className="font-weight-bold text-primary mx-2 my-1">{order.userdata[1].Phone}</p>
+                <p className="font-weight-bold text-primary mx-2 my-1">{Phone}</p>
               : <><input type="text" className="form-control" id="receiveTel" placeholder="請輸入電話" onChange={getPhone} required />
               <span className="text-danger d-inline-block ml-1">
                 (住家電話或手機聯絡電話皆可。)
@@ -106,14 +120,14 @@ function Step_3(props) {
             <label className="mx-2 my-1" htmlFor="receiveEmail">
               收貨人電子信箱：</label>
               {dataStatus ? 
-                <p className="font-weight-bold text-primary mx-2 my-1">{order.userdata[1].Email}</p>
+                <p className="font-weight-bold text-primary mx-2 my-1">{Email}</p>
               : <input type="email" className="form-control W-75 w-s-100" id="receiveEmail" placeholder="請輸入電子信箱" onChange={getEmail} required />
               }
           </div>
           <div className="form-group d-flex flex-wrap mb-0">
             <label className="mx-2 my-1" htmlFor="receiveAdrs">收貨人地址：</label>
             {dataStatus ? 
-                <p className="font-weight-bold text-primary mx-2 my-1">{order.userdata[1].Address}</p>
+                <p className="font-weight-bold text-primary mx-2 my-1">{Address}</p>
             : <input type="text" className="form-control W-75 w-s-100" id="receiveAdrs" placeholder="請輸入地址" onChange={getAddr} required />
              }
           </div>

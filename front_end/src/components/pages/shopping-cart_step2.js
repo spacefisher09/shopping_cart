@@ -6,12 +6,17 @@ function Step_2(props) {
   const PamntClass = "alert-info p-3 w-100 d-none";
   let [showPamnt,setshowPamnt] = useState(PamntClass);
 
+  useEffect(()=>{
+    setorder(props.pdctInfo);
+  },[props]);
+
+  //***** COD 貨到付款 / RM 匯款 => database 儲存值
    const radioBtn = e =>{
      return (radioBtn) ? (
-       (e.target.value == "帳戶匯款") ? 
+       (e.target.value == "RM") ? 
        (setshowPamnt(PamntClass.slice(0,PamntClass.lastIndexOf("d-none"))),
         order.pamnt_info = '' )
-       : (setshowPamnt(PamntClass),order.pamnt_info = e.target.value),
+       : (setshowPamnt(PamntClass),order.pamnt_info = '貨到付款'),
        order.pamnt_type = e.target.value,
        setorder(order),
        props.pdctInfoReturned(order)
@@ -23,14 +28,14 @@ function Step_2(props) {
           <div className="d-inline-flex flex-wrap justify-content-center border rounded-lg py-3 mr-2 mb-2" style={{ width: 'calc(50% - .6em)' }}>
             <i className="fas fa-hand-holding-usd w-100 text-center display-4 mb-2"></i>
             <div className="custom-control custom-radio custom-control-inline m-0">
-              <input className="custom-control-input" type="radio" name="payment" id="cash_transaction" onChange={radioBtn} value={"貨到付款"} />
+              <input className="custom-control-input" type="radio" name="payment" id="cash_transaction" onChange={radioBtn} value={"COD"} />
               <label className="custom-control-label" htmlFor="cash_transaction">貨到付款</label>
             </div>
           </div>
           <div className="d-inline-flex flex-wrap justify-content-center border rounded-lg py-3 ml-2 mb-2" style={{ width: 'calc(50% - .6em)' }}>
             <i className="far fa-credit-card w-100 text-center display-4 mb-2"></i>
             <div className="custom-control custom-radio custom-control-inline m-0">
-              <input className="custom-control-input" type="radio" name="payment" id="atm_transaction" onChange={radioBtn} value={"帳戶匯款"} />
+              <input className="custom-control-input" type="radio" name="payment" id="atm_transaction" onChange={radioBtn} value={"RM"} />
               <label className="custom-control-label" htmlFor="atm_transaction">帳戶匯款</label>
             </div>
           </div>

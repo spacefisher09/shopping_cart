@@ -51,10 +51,6 @@ let Data = {
     ],
     set_shipng_fee: 120,
     Userdata:[
-           {
-               userID:'test_user1',
-               userPWD:'test_user1',
-            },
             {
                 Name:'陳小明',
                 Phone:'0911-234567',

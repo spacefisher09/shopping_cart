@@ -25,6 +25,7 @@ class user_Serializer(serializers.ModelSerializer):
     def create(self,validated_data):
         user = User.objects.create_user(**validated_data)
         Token.objects.create(user=user)
+        userdata_model.objects.create(user=user)
         return user
 
 class userdata_Serializer(serializers.ModelSerializer):

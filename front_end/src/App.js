@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 
+import Navbar from './components/layouts/Navbar'
 
 function Home() {
+  const [token] = useCookies(['sc-token']);
+  const [USERNAME] = useCookies(['username']);
 
-    return (
+  return (
+    <>
+      <Navbar isLogin={(token['sc-token']!=='undefined') ? true : false} userName={USERNAME['username']} />
       <div className="hero-wrap ftco-degree-bg" style={{ marginBottom: '4em' }} data-stellar-background-ratio="0.5">
         <div className="container">
           <div className="d-flex slider-text justify-content-center align-items-start">
@@ -22,7 +28,8 @@ function Home() {
           </Link>
         </div>
       </div>
-    )
+    </>
+  )
 
 };
 

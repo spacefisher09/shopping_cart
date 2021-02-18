@@ -64,8 +64,7 @@ class userdata_model(models.Model):
         verbose_name = "會員資料"
         verbose_name_plural = "會員列表"
         ordering = ['-id']
-
-    #在admin展示 object name 為 pdct_name 商品名稱
+    #在admin展示 object name 為 Name
     def __str__(self):    # 定義物件的字串描述
         return self.Name
 
@@ -100,12 +99,17 @@ class userorder_model(models.Model):
     def order_num():
         return 'DT{}'.format(random.randint(100000,999999))
 
+    #抓預設運費
+    def getFee():
+        shipngFee = shipng_fee_model.objects.filter(pk=1).values_list('set_shipng_fee', flat=True)[0]
+        return shipngFee
+    
     userdata = models.ForeignKey(userdata_model, on_delete=models.CASCADE,verbose_name="訂購會員")
     order_id = models.CharField(verbose_name="訂單編號",max_length=100,unique=True,default=order_num)
     order_date = models.CharField(verbose_name="訂單日期",max_length=100,default=timezone.now().strftime('%Y/%m/%d')) # 備註分秒format %H:%M
     id_Amount = models.JSONField(verbose_name="訂單明細",blank=True,default=list)
     shipping_fee = models.IntegerField(
-        verbose_name="運費",validators=[MinValueValidator(0),MaxValueValidator(1000)],null=True,blank=True)
+        verbose_name="運費",validators=[MinValueValidator(0),MaxValueValidator(1000)],default=getFee)
     total_bill = models.IntegerField(
         verbose_name="總金額",validators=[MinValueValidator(0),MaxValueValidator(50000)],null=True,blank=True)
     pamnt_type = models.CharField(verbose_name="結帳方式",max_length=10,choices=PAMNT_TYPE,blank=True,default=PAMNT_TYPE[0][0])

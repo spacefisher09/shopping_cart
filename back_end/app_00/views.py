@@ -31,34 +31,52 @@ class userdata_viewset(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated,]
     @action(detail=False,methods=['POST'])
     def create_userdata(self,request,pk=None):
-        if 'Name' in request.data:
-            crteName = request.data['Name']
-            crtePhone = request.data['Phone']
-            crteEmail = request.data['Email']
-            crteAddr = request.data['Address']
+        if request.user != None:
             user = request.user
-
             try:
                 crte_user = userdata_model.objects.get(user=user.id)
-                crte_user.Name = crteName
-                crte_user.Phone = crtePhone
-                crte_user.Email = crteEmail
-                crte_user.Address = crteAddr
-                crte_user.save()
-                serializer = userdata_Serializer(crte_user,many=False)
-                return Response(
-                    {'result':serializer.data},status=status.HTTP_200_OK
-                )
+                # 判斷是否為儲存資料動作
+                if 'Name' in request.data:
+                    crte_user.Name = request.data['Name']
+                    crte_user.Phone = request.data['Phone']
+                    crte_user.Email = request.data['Email']
+                    crte_user.Address = request.data['Address']
+                    crte_user.save()
+                    serializer = userdata_Serializer(crte_user,many=False)
+                    return Response(
+                        '會員資料儲存成功！',status=status.HTTP_200_OK
+                    ) 
+                # 使頁面帶入使用者資料
+                else:
+                    serializer = userdata_Serializer(crte_user,many=False)
+                    return Response(
+                        serializer.data,status=status.HTTP_200_OK
+                    )
+
             except:
                 crte_user = userdata_model.objects.create(
-                    user=user,Name=crteName,Phone=crtePhone,Email=crteEmail,Address=crteAddr)
+                    user=user,Name=request.data['Name'],Phone=request.data['Phone'],
+                    Email=request.data['Email'],Address=request.data['Address']
+                )
                 serializer = userdata_Serializer(crte_user,many=False)
                 return Response(
-                    {'result':serializer.data},status=status.HTTP_200_OK
+                    '會員資料創建成功！',status=status.HTTP_200_OK
                 )
         else:
             return Response({'msg':'Errrrrror'},status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False,methods=['POST'])
+    def get_user(self,request,pk=None):
+        user = request.user
+        try:
+            get_user = userdata_model.objects.get(user=user.id)
+            serializer = userdata_Serializer(get_user,many=False)
+            return Response(
+                serializer.data,status=status.HTTP_200_OK
+            )
+        except:
+            return Response({'msg':'Errrrrror'},status=status.HTTP_400_BAD_REQUEST)
+    
 
 class userorder_viewset(viewsets.ModelViewSet):
     queryset = userorder_model.objects.all()
@@ -75,9 +93,22 @@ class userorder_viewset(viewsets.ModelViewSet):
             crte_userorder = userorder_model.objects.create(userdata=userdata,id_Amount=crteorder)
             serializer = userorder_Serializer(crte_userorder,many=False)
             return Response(
-                {'result':serializer.data},status=status.HTTP_200_OK
+                serializer.data,status=status.HTTP_200_OK
             )
         else:
             return Response({'msg':'Errrrrror'},status=status.HTTP_400_BAD_REQUEST)
             
-
+    @action(detail=False,methods=['POST'])
+    def get_userorder(self,request,pk=None):
+        user = request.user
+        userdata = userdata_model.objects.get(user=user.id)
+        try:
+            get_order = userorder_model.objects.filter(userdata=userdata)
+            serializer = userorder_Serializer(get_order,many=True)
+            return Response(
+                serializer.data,status=status.HTTP_200_OK
+            )
+        except:
+            return Response({'msg':'Errrrrror'},status=status.HTTP_400_BAD_REQUEST)
+       
+    

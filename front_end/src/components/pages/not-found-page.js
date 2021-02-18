@@ -1,9 +1,10 @@
 import React from 'react'
-//import { Link } from 'react-router-dom'
+import Navbar from '../layouts/Navbar'
 
 function NotFoundPage() {
   return (
     <>
+      <Navbar isLogin={false} userName={'undefined'} />
       <div className="hero-wrap hero-wrap-2 ftco-degree-bg" data-stellar-background-ratio="0.5">
         <div className="container">
           <div className="d-flex slider-text justify-content-center align-items-start">

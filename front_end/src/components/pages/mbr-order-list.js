@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { Modal } from 'react-bootstrap';
+import { useCookies } from 'react-cookie'
+
+import Navbar from '../layouts/Navbar'
 import Breadcrumbs from '../layouts/breadcrumbs'
 import { BrdcrbConsumer } from '../../index';
 import HeadTitle from '../layouts/HeadTitle'
@@ -11,27 +14,44 @@ const pg_title = '會員基本資料管理及訂單相關';
 
 
 function MbrOrderList() {
+  const [token] = useCookies(['sc-token']);
+  const [USERNAME] = useCookies(['username']);
 
-  let [orders, setorders] = useState(Data.userOrder);
+  let [orders, setorders] = useState([]);
   let [orderdtl, setorderdtl] = useState(null);
   let [pamntdtl, setpamntdtl] = useState([]);
   let [odrswitch, setodrswitch] = useState(false);
   let [pamntswitch, setpamntswitch] = useState(false);
+  let history = useHistory();
+
+  //userorder data
+  useEffect(()=>{
+    //導入產品項目
+    fetch(`http://127.0.0.1:8000/api/userorder/get_userorder/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token['sc-token']}`
+      },
+    }).then(
+      resp => resp.json()
+    ).then(
+      resp => setorders(resp)
+    ).catch((error) => { console.log(error); history.push('/not-found-page');});
+  },[])
 
   const open_Orderdtl = data =>{
-      setodrswitch(true);
-      setorderdtl(data);
+    setodrswitch(true);
+    setorderdtl(data);
   }
 
   const rtrnSwitchOdr = (OFF) => {
-     setodrswitch(OFF);
-     console.log(OFF);
+    setodrswitch(OFF);
   }
 
   const edit_recvInfo = data =>{
     setpamntswitch(true);
     setpamntdtl(data);
-    console.log(data);
   }
 
   const rtrnSwitchInfo = OFF => setpamntswitch(OFF);   
@@ -40,11 +60,49 @@ function MbrOrderList() {
     setpamntdtl(dtl);
     orders[dtl[0]].pamnt_info = dtl[1];
     setorders(orders);
-    console.log(orders[dtl[0]]);
+    //送出新訂單
+    fetch(`http://127.0.0.1:8000/api/userorder/${orders[dtl[0]].id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token['sc-token']}`
+      },
+      body: JSON.stringify(orders[dtl[0]])
+    }).then(
+      resp => resp.json()
+    ).then(
+      (resp) => {
+        alert('付款訊息送出成功！');
+      }
+    ).catch(
+      error => console.log(error)
+    );
+  }
+
+  //刪除訂單
+  const deleteOrder = odr =>{
+    orders = orders.filter(arr=>arr.id!==odr);
+    setorders(orders);
+    fetch(`http://127.0.0.1:8000/api/userorder/${odr}/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token['sc-token']}`
+      },
+    }).then(
+      resp => resp.json()
+    ).then(
+      (resp) => {
+        alert(resp);
+      }
+    ).catch(
+      error => console.log(error)
+    );
   }
 
   return (
     <>
+      <Navbar isLogin={(token['sc-token']!=='undefined') ? true : false} userName={USERNAME['username']} />
       <BrdcrbConsumer>
         {(context) => {
           return <Breadcrumbs urlList={context.MbrOrderList} pg_title={pg_title} />
@@ -87,7 +145,7 @@ function MbrOrderList() {
                     </td>
                     <td data-label="運送狀態|" className="text-center text-secondary font-weight-bold">未出貨</td>
                     <td data-label="訂單狀態|" className="text-center text-secondary font-weight-bold">
-                      <button className="btn btn-outline-danger btn-sm" type="button">刪除訂單</button>
+                      <button className="btn btn-outline-danger btn-sm" type="button" onClick={()=>deleteOrder(order.id)}>刪除訂單</button>
                     </td>
                   </tr>
                 )

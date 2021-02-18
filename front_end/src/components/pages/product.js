@@ -1,57 +1,98 @@
-import React, { component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
+import { useCookies } from 'react-cookie'
 
+import Navbar from '../layouts/Navbar'
 import Breadcrumbs from '../layouts/breadcrumbs';
 import { BrdcrbConsumer } from '../../index';
-import Data from '../../data';
 import Product_item from './product-item';
 
 
 function Product() {
+  const [token] = useCookies(['sc-token']);
+  const [USERNAME] = useCookies(['username']);
+  const [newOrder,setnewOrder] = useCookies(['neworder']);
+  //product list
+  const [mainList,setmainList] = useState([]);
   //login state
-  const [isLogin, setisLogin] = useState(false);
+  const [isLogin, setisLogin] = useState((token['sc-token']!=='undefined') ? true : false);
   //product item check
-  const [checkedItem, setcheckedItem] = useState([]);
+  let [checkedItem, setcheckedItem] = useState({'id_Amount':[]});
   //bootstrap modal
   const [show, setshow] = useState(false);
   const handleClose = () => setshow(false);
   const handleShow = () => setshow(true);
   
-  
   //tea data
-  const mainList = Data.PdctItem;
-  const teaType = ['紅 茶', '綠 茶', '烏 龍 茶'];
+  useEffect(()=>{
+    //導入產品項目
+    fetch(`http://127.0.0.1:8000/api/pdctlist`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(
+      resp => resp.json()
+    ).then(
+      resp => setmainList(resp)
+    ).catch((error) => { console.log(error); history.push('/not-found-page');});
+  },[])
+
+  
+  const teaType = [['RT','紅 茶'], ['GT','綠 茶'], ['OLT','烏 龍 茶']];
   const pg_title = '下方選擇欲購買的茶葉!';
 
-
-  const actLogin = () => setisLogin(true);
-
+  //產出勾選產品
   const checkItem = e => {
     const addVal = e.target.value;
-    let chkList = [...checkedItem, addVal];
-    if (checkedItem.includes(addVal)) {
+    //每次勾選產出新列表
+    let chkList = [...checkedItem['id_Amount'], addVal];
+    //過濾重複勾選
+    if (checkedItem['id_Amount'].includes(addVal)) {
       chkList = chkList.filter(val => val !== addVal)
     }
-    setcheckedItem(chkList);
+    //重設勾選品項
+    setcheckedItem({...checkItem,id_Amount:chkList});
   };
-
+  
   let history = useHistory();
   const postOrder = (e) => {
     e.preventDefault();
-    //post產品項目ID到訂單
-    // Data.userOrder[0].ID_Amount =
-      checkedItem.length == 0 ? (alert("購物車不可為空"))
-        : (
-         // checkedItem.map(str => str.split(',').map(str => Number(str))),
-          history.push('/shopping-cart') 
-          );
-          //檢查checkedItem不可為空值 否則跳出警示
-          //console.log(Data.userOrder[0].ID_Amount);
-    };
+    return checkedItem['id_Amount'].length == 0 ? (alert("購物車不可為空"))
+      : (
+        //轉換字串為數字
+        checkedItem['id_Amount'] = checkedItem['id_Amount'].map(str => str.split(',').map(str => Number(str))).map(
+          (arr) => {
+            const swapitem = mainList.filter(val => val.id == arr[0]);
+            return arr = [swapitem[0], 0];
+          }
+        ),
+        //送出新訂單
+        fetch(`http://127.0.0.1:8000/api/userorder/create_userorder/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token['sc-token']}`
+          },
+          body: JSON.stringify(checkedItem)
+        }).then(
+          resp => resp.json()
+        ).then(
+          (resp) => {
+            setnewOrder('neworder', resp);
+            history.push('/shopping-cart');
+          }
+        ).catch(
+          error => console.log(error)
+        )
+        
+      );
+   };
 
   return (
     <>
+      <Navbar isLogin={isLogin} userName={USERNAME['username']} />
       <BrdcrbConsumer>
         {(context) => {
           return <Breadcrumbs urlList={context.Product} pg_title={pg_title} />
@@ -64,17 +105,19 @@ function Product() {
           {teaType.map(
             (Type, index) => {
               return (
-                <Product_item t_Type={Type} isLogin={setisLogin} key={index} modal={handleShow} checkItem={checkItem}>
-                  {mainList.filter(itm => itm.pdct_type === Type)}
+                <Product_item t_Type={Type[1]} isLogin={isLogin} key={index} modal={handleShow} checkItem={checkItem}>
+                  {mainList.filter(itm => itm.pdct_type === Type[0])}
                 </Product_item>
               )
             }
           )}
 
           {/* <!-- 送出表單按鈕 --> */}
-          <hr />
-          {setisLogin ?
+          {isLogin ?
+            <>
+            <hr />
             <button type="submit" className="d-block mx-auto btn btn-lg btn-danger ion-ios-check">已確認品項，下一步</button>
+            </>
             : ''
           }
         </form>

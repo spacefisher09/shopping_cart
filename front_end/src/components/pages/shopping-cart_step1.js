@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 export function Countbox(props) {
   let [showNum,setshowNum] = useState(props.amount);
-  let [newOrder, setnewOrder] = useState(props.orderCounted.ID_Amount);
+  let [newOrder, setnewOrder] = useState(props.orderCounted.id_Amount);
  
   useEffect(()=>{
     //更新未刪除input顯示value
@@ -45,6 +45,10 @@ function Step_1(props) {
 
   let [countOrder, setcountOrder] = useState(props.pdctInfo);
 
+  useEffect(()=>{
+    setcountOrder(props.pdctInfo);
+  },[props]);
+
   let countBill = val => {
     return val.map(
       arr => { return arr[0].pdct_price * arr[1] }
@@ -52,7 +56,7 @@ function Step_1(props) {
   }
   const rtrnOrder = newOrder => {
     //countbox回傳的修改訂單重新指定給countOrder給countOrder
-    countOrder.ID_Amount = newOrder;
+    countOrder.id_Amount = newOrder;
     //計算訂單總額
     countOrder.total_bill = countBill(newOrder) + countOrder.shipping_fee;
     //修改顯示訂單總額
@@ -62,14 +66,13 @@ function Step_1(props) {
   }
 
   const dlteOrder2 = pos => {
-    countOrder.ID_Amount.splice(pos, pos + 1);
+    countOrder.id_Amount.splice(pos, pos + 1);
     //計算訂單總額
-    let totalCounted = countBill(countOrder.ID_Amount) + countOrder.shipping_fee;
+    let totalCounted = countBill(countOrder.id_Amount) + countOrder.shipping_fee;
     countOrder.total_bill = totalCounted == 100 ? 0 : totalCounted;
     //修改顯示訂單總額
     settotalBill(countOrder.total_bill);
     //修改刪除後顯示訂購商品項目
-    //console.log(itemsCreate(countOrder).toString())
     setitems(itemsCreate(countOrder));
     //回傳修改後訂單
     props.pdctInfoReturned(countOrder);
@@ -77,7 +80,7 @@ function Step_1(props) {
 
   //item產生html用
   let itemsCreate = odr => {
-    return odr.ID_Amount.map(
+    return odr.id_Amount.map(
       (arr, index) => {
         return (
           <div className="d-flex flex-wrap border-bottom border-white" key={index}>
