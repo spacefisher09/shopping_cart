@@ -1,16 +1,9 @@
 # 茶葉購物車網站
 > 前台－ https://tea-shopping-cart.firebaseapp.com
-<<<<<<< HEAD
-> 後台－ https://tea-shopping-cart.herokuapp.com/admin/
-
-
-## 使用技術
-=======
 
 > 後台－ https://tea-shopping-cart.herokuapp.com/admin/
 
 # 使用技術
->>>>>>> d8952112bfd48a12eb86c75862b937201caaf002
 * 前端：RWD / Bootstrap 4 / SCSS / JavaScript / React / Create React App
 * 後端：Python / Django / Django REST framework
 * 版本控制：Git 
