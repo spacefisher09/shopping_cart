@@ -12,23 +12,22 @@ const pg_title = '會員基本資料管理及訂單相關';
 
 function MbrIndex() {
     const [token, setToken, deleteToken] = useCookies(['sc-token']);
-    const [USERNAME, setUSERNAME, deleteUSERNAME] = useCookies(['username'])
+    const [USERNAME, setUSERNAME, deleteUSERNAME] = useCookies(['username']);
+     //初始設sc-token為字串undefined
+     setToken('sc-token', (token['sc-token']==undefined)? 'undefined' : token['sc-token']);
+
     let history = useHistory();
     //初始token為字串undefined
     let [isLogin,setisLogin] = useState((token['sc-token']!=='undefined')?true:false);
 
     useEffect(() => {
         //檢查是否為undefined
-        if(token['sc-token']==undefined) {
+        if(token['sc-token']=='undefined' || token['sc-token']==undefined) {
             setisLogin(false);
             //delete token為undefined值,需重新設定為初始值字串undefined
-            setToken('sc-token',undefined)
             setUSERNAME('username',undefined);
             history.push('/login');
         }
-        else if(token['sc-token']=='undefined'){
-            //非會員自動導向登錄頁面
-            history.push('/login');} 
     }, [token])
 
     const logoutClicked = () => {

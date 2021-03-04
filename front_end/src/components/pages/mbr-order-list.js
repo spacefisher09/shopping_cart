@@ -9,7 +9,6 @@ import { BrdcrbConsumer } from '../../index';
 import HeadTitle from '../layouts/HeadTitle'
 import { Order_dtl, Recv_infoForm } from './mbr-order-list_modals'
 
-import Data from '../../data';
 const pg_title = '會員基本資料管理及訂單相關';
 
 
@@ -27,7 +26,7 @@ function MbrOrderList() {
   //userorder data
   useEffect(()=>{
     //導入產品項目
-    fetch(`http://127.0.0.1:8000/api/userorder/get_userorder/`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/userorder/get_userorder/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +60,7 @@ function MbrOrderList() {
     orders[dtl[0]].pamnt_info = dtl[1];
     setorders(orders);
     //送出新訂單
-    fetch(`http://127.0.0.1:8000/api/userorder/${orders[dtl[0]].id}/`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/userorder/${orders[dtl[0]].id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +82,7 @@ function MbrOrderList() {
   const deleteOrder = odr =>{
     orders = orders.filter(arr=>arr.id!==odr);
     setorders(orders);
-    fetch(`http://127.0.0.1:8000/api/userorder/${odr}/`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/userorder/${odr}/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

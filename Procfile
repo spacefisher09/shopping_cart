@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath back_end back_end.wsgi --log-file -

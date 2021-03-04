@@ -11,7 +11,6 @@ import Step_1 from './shopping-cart_step1'
 import Step_2 from './shopping-cart_step2'
 import Step_3 from './shopping-cart_step3'
 
-import Data from '../../data';
 
 const pg_title = '請於下方進行商品訂購與結帳!';
 
@@ -24,6 +23,7 @@ function ShoppingCart() {
   //帶入選購商品資料
   const [UserOdr, setUserOdr] = useState(newOrder['neworder']);
   let history = useHistory();
+
 
   //bootstrap modal
   const [show, setshow] = useState(false);
@@ -43,7 +43,8 @@ function ShoppingCart() {
   
   //送出訂單
   const submitOrder = () => {
-    return fetch(`http://127.0.0.1:8000/api/userorder/${UserOdr.id}/`, {
+    return( 
+      fetch(`${process.env.REACT_APP_API_URL}/api/userorder/${UserOdr.id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -53,14 +54,15 @@ function ShoppingCart() {
     }).then(
       resp => resp.json()
     ).then(
-      (resp) => {
+      () => {
         handleClose();
         deletenewOrder(['neworder']);
-        history.push('/mbr-order-list');
       }
     ).catch(
       error => console.log(error)
-    );
+    ),
+    history.push('/mbr-order-list')
+    )
   }
 
   return (

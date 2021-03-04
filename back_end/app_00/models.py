@@ -19,8 +19,10 @@ class pdct_model(models.Model):
     pdct_name = models.CharField(verbose_name="產品名稱",max_length=100,blank=True)
     pdct_price = models.IntegerField(verbose_name="產品價格",validators=[MinValueValidator(0),MaxValueValidator(10000)],null=True)
     pdct_amount = models.CharField(verbose_name="產品份量",max_length=100,blank=True)
+    # 註解ImageField heroku database無法儲存圖片 改charfield
     # ImageField 屬性 upload_to 空值會自動抓setting的 MEDIA_URL 所以不寫入指定資料夾位置 'src/images/'
-    pdct_img = models.ImageField(verbose_name="產品照片",upload_to='',blank=True)
+    # pdct_img = models.ImageField(verbose_name="產品照片",upload_to='',blank=True)
+    pdct_img = models.CharField(verbose_name="產品照片",max_length=9999,blank=True)
 
     class Meta:
         unique_together = (('pdct_name','pdct_img'),)

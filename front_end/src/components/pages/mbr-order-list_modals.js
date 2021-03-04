@@ -23,16 +23,16 @@ function Order_dtl(props){
   }
 
   return (
-    <Modal size="lg" show={show} onHide={handleClose} >
+    <Modal size="lg" show={show} onHide={handleClose}>
       <Modal.Header>
         <Modal.Title className="text-dark"><i className="fas fa-money-check-alt mr-2"></i> 訂單明細</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ maxHeight: 'calc(100vh - 210px)', overflowY: 'auto' }}>
         {Orderdetail ?
           (<>
-            {Orderdetail.id_Amount.map(odr => {
+            {Orderdetail.id_Amount.map((odr,index) => {
               return (
-                <div className="d-flex flex-wrap border-bottom border-white">
+                <div className="d-flex flex-wrap border-bottom border-white" key={index}>
                   <div className="col-12 col-lg-2 col-md-4">
                     <span className="bg-light overflow-hidden mx-auto d-flex align-items-end border-light" style={{ width: '120px', height: '90px', border: '5px solid', }}>
                       <img className="img-fluid" src={odr[0].pdct_img} alt="" />
@@ -95,7 +95,7 @@ function Recv_infoForm(props){
     setPamntdetail(props.pamntData);
     setdetail(props.pamntData[1])
   }, [props])
-  //console.log(detail);
+
 
   const editPamnt = e =>{
     setdetail(e.target.value);

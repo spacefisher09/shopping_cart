@@ -16,18 +16,17 @@ function Product() {
   //product list
   const [mainList,setmainList] = useState([]);
   //login state
-  const [isLogin, setisLogin] = useState((token['sc-token']!=='undefined') ? true : false);
+  const [isLogin, setisLogin] = useState((token['sc-token']!=='undefined' && token['sc-token']!==undefined) ? true : false);
   //product item check
-  let [checkedItem, setcheckedItem] = useState({'id_Amount':[]});
+  let [checkedItem, setcheckedItem] = useState({'id_amount':[]});
   //bootstrap modal
   const [show, setshow] = useState(false);
   const handleClose = () => setshow(false);
   const handleShow = () => setshow(true);
-  
   //tea data
   useEffect(()=>{
     //導入產品項目
-    fetch(`http://127.0.0.1:8000/api/pdctlist`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/pdctlist/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -47,29 +46,30 @@ function Product() {
   const checkItem = e => {
     const addVal = e.target.value;
     //每次勾選產出新列表
-    let chkList = [...checkedItem['id_Amount'], addVal];
+    let chkList = [...checkedItem['id_amount'], addVal];
     //過濾重複勾選
-    if (checkedItem['id_Amount'].includes(addVal)) {
+    if (checkedItem['id_amount'].includes(addVal)) {
       chkList = chkList.filter(val => val !== addVal)
     }
     //重設勾選品項
-    setcheckedItem({...checkItem,id_Amount:chkList});
+    setcheckedItem({...checkItem,id_amount:chkList});
   };
   
   let history = useHistory();
   const postOrder = (e) => {
     e.preventDefault();
-    return checkedItem['id_Amount'].length == 0 ? (alert("購物車不可為空"))
+    return checkedItem['id_amount'].length == 0 ? (alert("購物車不可為空"))
       : (
         //轉換字串為數字
-        checkedItem['id_Amount'] = checkedItem['id_Amount'].map(str => str.split(',').map(str => Number(str))).map(
+        checkedItem['id_amount'] = checkedItem['id_amount'].map(str => str.split(',').map(str => Number(str))).map(
           (arr) => {
             const swapitem = mainList.filter(val => val.id == arr[0]);
             return arr = [swapitem[0], 0];
           }
         ),
+     
         //送出新訂單
-        fetch(`http://127.0.0.1:8000/api/userorder/create_userorder/`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/userorder/create_userorder/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

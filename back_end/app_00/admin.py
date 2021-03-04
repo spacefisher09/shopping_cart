@@ -2,6 +2,9 @@ from django.contrib import admin
 from .models import pdct_model,shipng_fee_model,userdata_model,userorder_model
 # Register your models here.
 
+admin.site.site_header = 'Tea Shop 後台管理'
+admin.site.site_title = 'Tea Shop 後台管理'
+
 class pdct_admin(admin.ModelAdmin):
     search_fields=['pdct_name']
 

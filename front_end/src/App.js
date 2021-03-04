@@ -5,12 +5,15 @@ import { useCookies } from 'react-cookie'
 import Navbar from './components/layouts/Navbar'
 
 function Home() {
-  const [token] = useCookies(['sc-token']);
-  const [USERNAME] = useCookies(['username']);
+  const [token, setToken] = useCookies(['sc-token']);
+  const [USERNAME, setUSERNAME] = useCookies(['username']);
+  //初始設sc-token / username 為字串undefined
+  setToken('sc-token', (token['sc-token']==undefined)? 'undefined' : token['sc-token']);
+  setUSERNAME('username', (USERNAME['username']==undefined)? 'undefined' : USERNAME['username']);
 
   return (
     <>
-      <Navbar isLogin={(token['sc-token']!=='undefined') ? true : false} userName={USERNAME['username']} />
+      <Navbar isLogin={(token['sc-token']!=='undefined' && token['sc-token']!==undefined) ? true : false} userName={USERNAME['username']} />
       <div className="hero-wrap ftco-degree-bg" style={{ marginBottom: '4em' }} data-stellar-background-ratio="0.5">
         <div className="container">
           <div className="d-flex slider-text justify-content-center align-items-start">

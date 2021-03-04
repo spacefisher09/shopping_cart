@@ -15,9 +15,11 @@ function Product_item(props) {
             return (
                 <div className="col-md-4" key={index}>
                     <div className="property-wrap">
-                        <span className="img" style={{ backgroundImage: `url(${arr.pdct_img})` }}></span>
+                        <span className="img overflow-hidden d-flex justify-content-center align-items-start">
+                            <img referrerPolicy="no-referrer" src={arr.pdct_img} alt="" className="img-fluid" style={{width:`90%`,maxHeight:`100%`,maxWidth:`400px`}}/>
+                        </span>
                         <div className="text">
-                            <p className="price font-weight-bold"><span className="orig-price text-danger"> {arr.pdct_price} <small className="ml-2">{arr.pdct_amount}</small></span></p>
+                            <p className="price font-weight-bold"><span className="orig-price text-danger">$ {arr.pdct_price} 元 <small className="ml-2">{arr.pdct_amount}</small></span></p>
                             <h3 className="font-weight-bold">{arr.pdct_name}</h3>
                             {props.isLogin ?
                                 <label className="btn-custom text-dark mb-0" htmlFor={`tea${arr.id}`}>

@@ -17,7 +17,7 @@ function Navbar(props) {
 	return (
 		<nav className={navClass} id="ftco-navbar">
 			<div className="container">
-				<Link className="navbar-brand" to="/">龍源茶品</Link>
+				<Link className="navbar-brand" to="/">無名茶行</Link>
 				<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="fas fa-bars"></span>
 				</button>

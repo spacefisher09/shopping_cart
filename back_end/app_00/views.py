@@ -85,8 +85,8 @@ class userorder_viewset(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated,]
     @action(detail=False,methods=['POST'])
     def create_userorder(self,request,pk=None):
-        if 'id_Amount' in request.data:
-            crteorder = request.data['id_Amount']
+        if 'id_amount' in request.data:
+            crteorder = request.data['id_amount']
             user = request.user
             userdata = userdata_model.objects.get(user=user.id)
             

@@ -38,8 +38,8 @@ function Login() {
     //判斷取得token後,再設定登陸和抓使用者名稱
     if (USERNAME['username'] == 'undefined' && token['sc-token'] !== 'undefined') {
       setisLogin(true);
-      getUsername(`http://127.0.0.1:8000/api/userdata/get_user/`);
-    }else if(USERNAME['username'] !== 'undefined'){
+      getUsername(`${process.env.REACT_APP_API_URL}/api/userdata/get_user/`);
+    }else if(USERNAME['username'] !== 'undefined' && USERNAME['username'] !== undefined){
       //判斷抓到使用者名稱後,導向首頁
       history.push('/');
     }
@@ -48,7 +48,7 @@ function Login() {
 
   const loginClicked = e => {
     e.preventDefault();
-    return fetch(`http://127.0.0.1:8000/auth/`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/auth/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -105,8 +105,8 @@ function Login() {
                   </div>
                 </div>
                 <div className="form-group text-center mt-4">
-                  <Link to='/register' className="btn btn-primary py-2 px-5 mr-1">加入會員</Link>
-                  <input type="submit" value="確認登入" className="btn btn-danger py-2 px-5" />
+                  <Link to='/register' className="btn btn-primary py-2 px-5 mr-1 mb-1">加入會員</Link>
+                  <input type="submit" value="確認登入" className="btn btn-danger py-2 px-5 mr-1 mb-1" />
                 </div>
               </form>
 

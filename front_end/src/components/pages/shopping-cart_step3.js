@@ -18,7 +18,7 @@ function Step_3(props) {
 
   const getUserdata = e => {
     return (e.target.checked) ? (
-      fetch(`http://127.0.0.1:8000/api/userdata/${order.userdata}/`, {
+      fetch(`${process.env.REACT_APP_API_URL}/api/userdata/${order.userdata}/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

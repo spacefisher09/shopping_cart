@@ -13,7 +13,7 @@ const pg_title = '會員基本資料管理及訂單相關';
 
 function MbrInfo() {
   const [token] = useCookies(['sc-token']);
-  const [USERNAME] = useCookies(['username']);
+  const [USERNAME, setUSERNAME] = useCookies(['username'])
   let [isLogin, setisLogin] = useState((token['sc-token'] !== 'undefined') ? true : false);
 
   let history = useHistory();
@@ -21,7 +21,7 @@ function MbrInfo() {
   let [readmode,setreadmode] = useState(true);
   //userdata
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/userdata/create_userdata/`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/userdata/create_userdata/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,12 +45,11 @@ function MbrInfo() {
 
   const rtrn_userdata = intData =>{
      setuserdata(intData);
-     console.log(intData);
   }
   const submitUserForm = e =>{
     e.preventDefault();
     //post會員資料寫於此
-    fetch(`http://127.0.0.1:8000/api/userdata/create_userdata/`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/userdata/create_userdata/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -62,6 +61,7 @@ function MbrInfo() {
     ).then(
       (resp) => {
         alert(resp);
+        setUSERNAME('username', userdata['Name'])
         history.push('/mbr-index');
       }
     ).catch(

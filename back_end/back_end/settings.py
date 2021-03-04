@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+from decouple import config
+from dj_database_url import parse as dburl
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,13 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '70x#6=dckezw023-ut9oj9&++#i)8sd+59(sobqcg46g3p!1g#'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
 #上面debug關掉 下面 [] 需要改 ['*']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','tea-shopping-cart.herokuapp.com']
 
 
 # Application definition
@@ -62,7 +64,9 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ('GET', 'PUT', 'POST', 'DELETE')
 # CORS_ORIGIN_ALLOW_ALL = True    # 允許所有跨站請求, 且whitelist不會被使用
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000'
+    'localhost:3000',
+    'tea-shopping-cart.web.app',
+    'tea-shopping-cart.firebaseapp.com'
 )
 
 
@@ -90,11 +94,10 @@ WSGI_APPLICATION = 'back_end.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': config('DATABASE_URL', default=default_dburl, cast=dburl)
 }
 
 #token 設定
@@ -127,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'zh-hant'
 
 TIME_ZONE = 'Asia/Taipei'
 
@@ -143,6 +146,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+#註解ImageField以下設定 heroku database無法儲存圖片 改charfield
 #覆寫ImageField套件中的值 避免圖片無法顯示
-MEDIA_ROOT = os.path.join(BASE_DIR, "src/images")
-MEDIA_URL = '/src/images/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "src/images")
+# MEDIA_URL = '/src/images/'
