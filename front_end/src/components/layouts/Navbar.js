@@ -24,9 +24,9 @@ function Navbar(props) {
 
 				<div className="collapse navbar-collapse" id="ftco-nav">
 					<ul className="navbar-nav ml-auto">
-						<li className="nav-item"><Link to="/about" className="nav-link ion-ios-leaf"> 關於茶行</Link></li>
+						<li className="nav-item"><div className="nav-link text-muted ion-ios-leaf"> 關於茶行</div></li>
 						<li className="nav-item"><Link to="/product" className="nav-link ion-ios-basket"> 產品專區</Link></li>
-						<li className="nav-item"><Link to="/contact" className="nav-link ion-ios-information-circle-outline"> 聯絡我們</Link></li>
+						<li className="nav-item"><div className="nav-link text-muted ion-ios-information-circle-outline"> 聯絡我們</div></li>
 						<li className="nav-item link-lgn"><Link to="/login" className="nav-link ion-ios-person btn btn-outline-light rounded-pill"> 登入會員</Link></li>
 						<li className="nav-item link-mbr"><Link to="/mbr-index" className="nav-link ion-ios-person btn btn-outline-light rounded-pill"> 你好，{USERNAME}!</Link></li>
 					</ul>
