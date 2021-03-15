@@ -393,7 +393,7 @@ h1, h2, h3, h4, h5,
 		@include gradient-background();
 		height: 850px;
 	}
-	.ftco-animate{
+	.breadcrumbs{
 		margin-top:13em;
 	}
 	&.hero-wrap-2{
@@ -452,12 +452,14 @@ h1, h2, h3, h4, h5,
 		line-height: 1.5;
 		color: rgba(0,0,0,.8);
 	}
-	.breadcrumbs{
+	.breadcrumbs p{
 		font-size: 14px;
 		margin-bottom: 20px;
 		z-index: 99;
 		text-transform: uppercase;
 		font-weight: 500;
+	}
+	.breadcrumbs{
 		span{
 			color: $white;
 			i{
@@ -597,6 +599,7 @@ h1, h2, h3, h4, h5,
 
 
 //PROPERTY
+.tea_list .row{min-height: 200px;}
 .property-wrap{
 	margin-bottom: 50px;
 	@include media-breakpoint-down(sm){
@@ -982,12 +985,10 @@ footer {
 
 
 
-#ftco-loader {
-	position: fixed;
+.ftco-loader {
+	position: absolute;
 	width:  96px;
 	height: 96px;
-	left:  50%;
-	top: 50%;
 	transform: translate(-50%, -50%);
 	background-color: rgba(255,255,255,0.9);
 	box-shadow: 0px 24px 64px rgba(0,0,0,0.24);
@@ -998,25 +999,25 @@ footer {
 	z-index:1000;
 }
 
-#ftco-loader.fullscreen {
+.ftco-loader.fullscreen {
 	padding:  0;
 	left:  0;
-	top:  0;
+	bottom:  0;
 	width:  100%;
-	height: 100%;
+	height: calc(100% - 100px);
 	transform: none;
 	background-color: #fff;
 	border-radius: 0;
 	box-shadow: none;
 }
 
-#ftco-loader.show {
+.ftco-loader.show {
 	transition: opacity .4s ease-out, visibility 0s linear 0s;
 	visibility: visible;
 	opacity: 1;
 }
 
-#ftco-loader .circular {
+.ftco-loader .circular {
   animation: loader-rotate 2s linear infinite;
   position: absolute;
   left:  calc(50% - 24px);
@@ -1025,7 +1026,7 @@ footer {
   transform: rotate(0deg);
 }
 
-#ftco-loader .path {
+.ftco-loader .path {
   stroke-dasharray: 1, 200;
   stroke-dashoffset: 0;
   animation: loader-dash 1.5s ease-in-out infinite;
@@ -1059,50 +1060,56 @@ footer {
     width: 110px;
 	overflow: hidden;
     input {
-    margin: 0;
-    width: 15px;
-    height: 15px;
-    padding: 0;
-    float: right;
-    font-size: 20px;
-    outline: 0;
-	border: 1px solid;
-	color: #dc3545;
-    }
-    input.qty {
-    position: relative;
-    width: 100%;
-    height: 40px;
-    padding: 10px 25px 10px 10px;
-    font-weight: 400;
-    font-size: 15px;
-    border-radius: 0;
-	background-clip: padding-box;
-	background-color: #fff;
-	}
-	& .minus, & .plus {
-		line-height: 0;
-		background-clip: padding-box;
-		-webkit-border-radius: 0;
-		-moz-border-radius: 0;
+		margin: 0;
+		float: right;
+		outline: 0;
+		border: 1px solid;
+		color: #dc3545;
+		position: relative;
+		width: 100%;
+		height: 40px;
+		padding-left: 10px;
+		font-weight: 400;
+		font-size: 15px;
 		border-radius: 0;
-		-webkit-background-size: 6px 30px;
-		-moz-background-size: 6px 30px;
+		background-clip: padding-box;
+		background-color: #fff;
+    }
+    input[type="number"].qty::-webkit-outer-spin-button,
+    input[type="number"].qty::-webkit-inner-spin-button {
+    	-webkit-appearance: none;
+    	background: transparent;
+    	width: 24px;
+    	border-left: 1px solid #BBB;
+    	opacity: 1;
+    	/* shows Spin Buttons per default (Chrome >= 39) */
+    	position: absolute;
+    	top: 0;
+    	right: 0;
+    	bottom: 0;
+    }
+	& .minus, & .plus {
+		line-height: .8;
 		font-size: 20px;
 		position: absolute;
-		height: 50%;
+		height: calc(50% - 1px);
 		border: 0;
-		right: 0;
+		right: 1px;
+		bottom: 50%;
 		padding: 0;
 		width: 25px;
-		z-index: 3;
-		background: transparent;
+		cursor: default;
+		z-index: 2;
+		background-color: #fff;
+		pointer-events: none;
+		color: #dc3545;
+		text-align: center;
 	}
 	& .minus:hover, & .plus:hover {
 		background-color: #ffefef;
 	}
 	& .minus {
-		bottom: 0
+		bottom: 1px;
 	}
 }
 
@@ -1110,7 +1117,6 @@ footer {
 /*月曆plugin*/
 .date{
 	position: relative;
-	overflow: hidden;
 	background: #fff;
 	padding: 0;
 	cursor: pointer;

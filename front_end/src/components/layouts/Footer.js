@@ -14,9 +14,7 @@ function Footer() {
           </div>
         </div>
       </footer>
-      <div id="ftco-loader" className="show fullscreen">
-        <Loader></Loader>
-      </div>
+      
     </>
   );
 }

@@ -8,6 +8,7 @@ import Breadcrumbs from '../layouts/breadcrumbs'
 import { BrdcrbConsumer } from '../../index';
 import HeadTitle from '../layouts/HeadTitle'
 import { Order_dtl, Recv_infoForm } from './mbr-order-list_modals'
+import { ReactComponent as Loader } from '../../loader.svg'
 
 const pg_title = '會員基本資料管理及訂單相關';
 
@@ -21,6 +22,7 @@ function MbrOrderList() {
   let [pamntdtl, setpamntdtl] = useState([]);
   let [odrswitch, setodrswitch] = useState(false);
   let [pamntswitch, setpamntswitch] = useState(false);
+  const [loaderClass, setloaderClass] = useState("ftco-loader fullscreen show"); 
   let history = useHistory();
 
   //userorder data
@@ -35,7 +37,10 @@ function MbrOrderList() {
     }).then(
       resp => resp.json()
     ).then(
-      resp => setorders(resp)
+      (resp) => {
+        setorders(resp);
+        setloaderClass(Boolean(resp)? "ftco-loader fullscreen" : loaderClass);
+      }
     ).catch((error) => { console.log(error); history.push('/not-found-page');});
   },[])
 
@@ -110,10 +115,8 @@ function MbrOrderList() {
 
 
       <section className="ftco-section container">
-
+        <div className="px-3 position-relative">
         <HeadTitle EngTitle="member" HdTitle="訂 單 管 理" />
-
-        <div className="px-3">
           <table className="table table-rwd table-hover text-info bg-white border-bottom">
             <thead>
               <tr className="alert-info text-info">
@@ -157,6 +160,8 @@ function MbrOrderList() {
           <div className="w-100 d-flex flex-nowrap justify-content-center mt-4">
             <Link to="/mbr-index" className="btn btn-warning d-inline-block W-20 w-xs-50 mr-2">返回會員專區</Link>
           </div>
+          {/* 資料讀取顯示 */}
+          <div className={loaderClass}><Loader></Loader></div>
         </div>
       </section>
       

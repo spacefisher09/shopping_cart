@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-
+import { ReactComponent as Loader } from '../../loader.svg'
 
 function Step_3(props) {
 
@@ -10,6 +10,7 @@ function Step_3(props) {
   const [Phone, setPhone] = useState(''); 
   const [Email, setEmail] = useState(''); 
   const [Address, setAddress] = useState(''); 
+  const [loaderClass, setloaderClass] = useState("ftco-loader h-100 fullscreen"); 
 
   useEffect(()=>{
     setorder(props.pdctInfo);
@@ -18,6 +19,7 @@ function Step_3(props) {
 
   const getUserdata = e => {
     return (e.target.checked) ? (
+      setloaderClass("ftco-loader h-100 fullscreen  show"),
       fetch(`${process.env.REACT_APP_API_URL}/api/userdata/${order.userdata}/`, {
         method: 'GET',
         headers: {
@@ -38,6 +40,7 @@ function Step_3(props) {
           setPhone(resp.Phone);
           setEmail(resp.Email);
           setAddress(resp.Address);
+          setloaderClass(Boolean(resp)? "ftco-loader fullscreen" : loaderClass);
         }
       ).catch(
         error => console.log(error)
@@ -88,6 +91,7 @@ function Step_3(props) {
               <label className="custom-control-label" htmlFor="equal_user" style={{ cursor: 'pointer' }}>收貨人資料同會員資料</label>
             </div>
           </div>
+          <div className="position-relative">
           <div className="form-inline">
             {/* PICK_TZ1 / PICK_TZ2 database儲存值 */}
             <div className="form-group w-100 mb-2">
@@ -131,7 +135,9 @@ function Step_3(props) {
             : <input type="text" className="form-control W-75 w-s-100" id="receiveAdrs" placeholder="請輸入地址" onChange={getAddr} required />
              }
           </div>
-
+          {/* 資料讀取顯示 */}
+          <div className={loaderClass}><Loader></Loader></div>
+          </div>
         </div>
     )
 };

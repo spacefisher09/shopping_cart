@@ -1,4 +1,5 @@
 import React,{useState,useEffect} from 'react';
+import { ReactComponent as Loader } from '../../loader.svg'
 import { Link } from 'react-router-dom';
 import HeadTitle from '../layouts/HeadTitle';
 
@@ -8,7 +9,11 @@ function Product_item(props) {
     const [pdctList,setpdctList] = useState(props.children);
     useEffect(()=>{
         setpdctList(props.children);
+        setloaderClass(props.children.length>0? "ftco-loader fullscreen" : loaderClass);
     },[props]);
+
+    const [loaderClass, setloaderClass] = useState("ftco-loader fullscreen show"); 
+
 
     const items = pdctList.map(
         (arr,index) => {
@@ -33,9 +38,11 @@ function Product_item(props) {
         })
 
     return (
-        <div className="row mb-5" key={props.t_type}>
+        <div className="row mb-5 position-relative" key={props.t_type}>
             <HeadTitle EngTitle="category" HdTitle={`${props.t_Type} 系 列`}/>
             {items}
+            {/* 資料讀取顯示 */}
+            <div className={loaderClass}><Loader></Loader></div>
         </div>
 
     )

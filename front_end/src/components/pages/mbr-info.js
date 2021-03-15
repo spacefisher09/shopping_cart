@@ -7,6 +7,7 @@ import Breadcrumbs from '../layouts/breadcrumbs'
 import { BrdcrbConsumer } from '../../index';
 import HeadTitle from '../layouts/HeadTitle'
 import {Memberform} from '../layouts/memberform'
+import { ReactComponent as Loader } from '../../loader.svg'
 
 const pg_title = '會員基本資料管理及訂單相關';
 
@@ -19,6 +20,7 @@ function MbrInfo() {
   let history = useHistory();
   let [userdata,setuserdata] = useState([]);
   let [readmode,setreadmode] = useState(true);
+  const [loaderClass, setloaderClass] = useState("ftco-loader fullscreen show");
   //userdata
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/api/userdata/create_userdata/`, {
@@ -38,6 +40,7 @@ function MbrInfo() {
           'Address' : resp.Address
         };
         setuserdata({...userdata,...getuser});
+        setloaderClass(Boolean(resp)? "ftco-loader fullscreen" : loaderClass);
       }
     ).catch((error) => { console.log(error); history.push('/not-found-page');});
   }, [])
@@ -83,15 +86,15 @@ function MbrInfo() {
       </BrdcrbConsumer>
 
       <section className="ftco-section container">
-
-        <HeadTitle EngTitle="member" HdTitle="會 員 基 本 資 料"/>
-
-        <form className="px-3" onSubmit={submitUserForm}>
-          <Memberform  userdata={userdata} readmode={readmode} rtrn_userdata={rtrn_userdata}/>
+        <form className="px-3 position-relative" onSubmit={submitUserForm}>
+          <HeadTitle EngTitle="member" HdTitle="會 員 基 本 資 料" />
+          <Memberform userdata={userdata} readmode={readmode} rtrn_userdata={rtrn_userdata} />
           <div className="w-100 d-flex flex-nowrap justify-content-center mt-4">
-                <button className="btn btn-warning d-inline-block W-20 w-xs-50 mr-2" type="button" onClick={offReadmode}>修改資料</button>
-                <button className="btn btn-danger d-inline-block W-20 w-xs-50" type="submit">確認儲存</button>
-            </div>
+            <button className="btn btn-warning d-inline-block W-20 w-xs-50 mr-2" type="button" onClick={offReadmode}>修改資料</button>
+            <button className="btn btn-danger d-inline-block W-20 w-xs-50" type="submit">確認儲存</button>
+          </div>
+          {/* 資料讀取顯示 */}
+          <div className={loaderClass}><Loader></Loader></div>
         </form>
       </section>
     </>
