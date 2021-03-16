@@ -12,7 +12,7 @@
 <br/>
 
 ## 前端網站功能
-<p align="center"><img width="90%" src="https://github.com/spacefisher09/shopping_cart/raw/master/screenshots/React%20App%2000.png"/></p>
+<p align="center"><img width="90%" src="https://github.com/spacefisher09/shopping_cart/raw/master/screenshots/React%20App%2003.png"/></p>
 
  * 會員登入
  * 會員送出商品訂單 / 訂單回覆 / 顯示訂單狀態 / 刪除訂單
