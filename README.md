@@ -3,6 +3,8 @@
  > 前台－ https://tea-shopping-cart.firebaseapp.com
 
  > 後台－ https://tea-shopping-cart.herokuapp.com/admin/
+ 
+ > 網站畫面截圖 - https://photos.app.goo.gl/iwPMXK81JwNe1RxW6
 <br/>
 
 ## 使用技術
