@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
+//waypoint plugin
+import { Waypoint } from 'react-waypoint';
 
 import Navbar from './components/layouts/Navbar'
 
@@ -10,6 +12,13 @@ function Home() {
   //初始設sc-token / username 為字串undefined
   setToken('sc-token', (token['sc-token']==undefined)? 'undefined' : token['sc-token']);
   setUSERNAME('username', (USERNAME['username']==undefined)? 'undefined' : USERNAME['username']);
+  const [animaClass, setanimaClass] = useState("breadcrumbs d-inline-block ftco-animate"); 
+    
+  const scrollanima = () =>{
+    setTimeout(() => {
+        setanimaClass("breadcrumbs d-inline-block ftco-animate fadeInUp ftco-animated");
+    }, 600);
+  }
 
   return (
     <>
@@ -17,12 +26,14 @@ function Home() {
       <div className="hero-wrap ftco-degree-bg" style={{ marginBottom: '4em' }} data-stellar-background-ratio="0.5">
         <div className="container">
           <div className="d-flex slider-text justify-content-center align-items-start">
-            <div className="breadcrumbs d-inline-block">
+          <Waypoint onEnter={scrollanima}>
+            <div className={animaClass}>
               <div className="text text-center">
                 <h1 className="mb-4 text-white">本茶行採用自然農法</h1>
                 <p className="text-white">復育「小葉綠蟬」防治茶蟲，被小葉綠蟬吸吮過的大葉烏龍茶葉，經過達人精心烘焙下完成頂級香氣襲人的蜜香紅茶。</p>
               </div>
             </div>
+            </Waypoint>
           </div>
         </div>
         <div className="mouse">
