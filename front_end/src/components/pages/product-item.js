@@ -2,6 +2,10 @@ import React,{useState,useEffect} from 'react';
 import { ReactComponent as Loader } from '../../loader.svg'
 import { Link } from 'react-router-dom';
 import HeadTitle from '../layouts/HeadTitle';
+//waypoint plugin
+import { Waypoint } from 'react-waypoint';
+//slick plugin
+import Slider from "react-slick";
 
 
 function Product_item(props) {
@@ -12,14 +16,44 @@ function Product_item(props) {
         setloaderClass(props.children.length>0? "ftco-loader fullscreen" : loaderClass);
     },[props]);
 
-    const [loaderClass, setloaderClass] = useState("ftco-loader fullscreen show"); 
-
+    const [loaderClass, setloaderClass] = useState("ftco-loader fullscreen show");
+    const [animaClass, setanimaClass] = useState("property-wrap ftco-animate"); 
+    
+    const scrollanima = () =>{
+        setTimeout(() => {
+            setanimaClass("property-wrap ftco-animate fadeInUp ftco-animated");
+        }, 150);
+    }
+    var settings = {
+        infinite: false,
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        initialSlide: 0,
+        dots: true,
+        responsive: [{
+            breakpoint: 767,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+                infinite: true,
+                dots: true
+            }
+        }, {
+            breakpoint: 600,
+            settings: {
+                dots: true,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                infinite: true
+            }
+        }]
+    };
 
     const items = pdctList.map(
         (arr,index) => {
             return (
-                <div className="col-md-4" key={index}>
-                    <div className="property-wrap">
+                <div className="js-slider-item" key={index}>
+                    <div className={animaClass}>
                         <span className="img overflow-hidden d-flex justify-content-center align-items-start">
                             <img referrerPolicy="no-referrer" src={arr.pdct_img} alt="" className="img-fluid" style={{width:`90%`,maxHeight:`100%`,maxWidth:`400px`}}/>
                         </span>
@@ -38,9 +72,12 @@ function Product_item(props) {
         })
 
     return (
-        <div className="row mb-5 position-relative" key={props.t_type}>
+        <div className="mb-5 position-relative" key={props.t_type}>
             <HeadTitle EngTitle="category" HdTitle={`${props.t_Type} 系 列`}/>
-            {items}
+            <Waypoint onEnter={scrollanima} bottomOffset='100px'/>
+            <Slider {...settings}>
+                {items}
+            </Slider>
             {/* 資料讀取顯示 */}
             <div className={loaderClass}><Loader></Loader></div>
         </div>

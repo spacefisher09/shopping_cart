@@ -1,8 +1,17 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom'
+//waypoint plugin
+import { Waypoint } from 'react-waypoint';
 
 
 function Breadcrumbs(props) {
+  const [animaClass, setanimaClass] = useState("breadcrumbs d-inline-block ftco-animate"); 
+    
+    const scrollanima = () =>{
+        setTimeout(() => {
+          setanimaClass("breadcrumbs d-inline-block ftco-animate fadeInUp ftco-animated");
+      }, 150);
+    }
   let children = props.urlList.map(
     ({ to, linkName }, index) => {
       return (to === '/' ?
@@ -15,12 +24,14 @@ function Breadcrumbs(props) {
     <div className="hero-wrap hero-wrap-2 ftco-degree-bg" data-stellar-background-ratio="0.5">
       <div className="container">
         <div className="d-flex slider-text justify-content-center align-items-start">
-          <div className="breadcrumbs d-inline-block">
+        <Waypoint onEnter={scrollanima}>
+          <div className={animaClass}>
             <div className="text text-center">
               <p className="text-white">{children}</p>
               <h1 className="mb-3 bread text-white">{props.pg_title}</h1>
             </div>
           </div>
+          </Waypoint>
         </div>
       </div>
     </div>

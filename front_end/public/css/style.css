@@ -11373,11 +11373,11 @@ h1, h2, h3, h4, h5,
 }
 
 .hero-wrap .breadcrumbs {
-  margin-top: 13em;
+  margin-top: 11em;
 }
 
 .hero-wrap.hero-wrap-2 {
-  height: 600px !important;
+  height: 450px !important;
   position: relative;
 }
 
@@ -11388,7 +11388,7 @@ h1, h2, h3, h4, h5,
 }
 
 .hero-wrap.hero-wrap-2 .slider-text {
-  height: 700px !important;
+  height: 500px !important;
 }
 
 .slider-text {
@@ -12149,22 +12149,6 @@ footer a:hover {
 }
 
 /*月曆plugin*/
-.date {
-  position: relative;
-  background: #fff;
-  padding: 0;
-  cursor: pointer;
-}
-
-.date .input-group-addon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 1.25rem;
-  height: 100%;
-  line-height: 1.8;
-}
-
 @media (max-width: 600px) {
   .table-rwd.table {
     border: 0;
@@ -12194,4 +12178,27 @@ footer a:hover {
     color: #4191ae;
     margin-right: .4em;
   }
+}
+
+.slick-next {
+  right: -12px;
+}
+
+.slick-prev {
+  left: -12px;
+}
+
+.slick-prev, .slick-next {
+  width: 40px;
+  height: 40px;
+  z-index: 100;
+}
+
+.slick-prev:before, .slick-next:before {
+  color: #ccc;
+  font-size: 2.5rem;
+}
+
+.slick-dots {
+  bottom: 0;
 }
