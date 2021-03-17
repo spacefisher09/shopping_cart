@@ -4,3 +4,5 @@
 *.db
 back_end/back_end/__pycache__/
 back_end/app_00/migrations/
+back_end/.env
+
