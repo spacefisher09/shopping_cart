@@ -1,6 +1,6 @@
 
 ## 茶葉購物車網站
- > 前台－ https://tea-shopping-cart.firebaseapp.com
+ > 前台－ https://tea-shopping-cart.firebaseapp.com  - 測試會員帳密 guest123 / gt112233
 
  > 後台－ https://tea-shopping-cart.herokuapp.com/admin/
  
