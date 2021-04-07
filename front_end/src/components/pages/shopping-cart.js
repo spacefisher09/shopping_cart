@@ -42,8 +42,9 @@ function ShoppingCart() {
   }
   
   //送出訂單
-  const submitOrder = async() => {
-    const postorder = await fetch(`${process.env.REACT_APP_API_URL}/api/userorder/${UserOdr.id}/`, {
+  const submitOrder = () => {
+    return( 
+      fetch(`${process.env.REACT_APP_API_URL}/api/userorder/${UserOdr.id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -55,15 +56,13 @@ function ShoppingCart() {
     ).then(
       () => {
         handleClose();
+        history.push('/mbr-order-list');
         deletenewOrder(['neworder']);
       }
     ).catch(
       error => console.log(error)
-    );
-    return (
-      postorder,
-      history.push('/mbr-order-list')
-    );
+    )
+    )
   }
 
   return (
